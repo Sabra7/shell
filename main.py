@@ -13,38 +13,35 @@ def main():
         sys.stdout.write("$ ")
         sys.stdout.flush()
 
-        user_input = input()
+        user_input = input().strip().split()
         if not user_input:
             continue
 
-        command = user_input
-        cmd_name = command
-        file_name = cmd_name.split()[0]
-        tokens = cmd_name.split()
+        cmd_name = user_input[0]
+        tokens = user_input
+        arg_w = user_input[1:]
+        arg_t = " ".join(arg_w)
+        builtin = ["type","exit","echo"]
+# exit fun is done
+# TODO: use sys.exit(int(arg_t)) - handle empty arg
+        if cmd_name == "exit": break
+            
+# echo fun is done
+        elif cmd_name == "echo": print(" ".join(arg_w))
+            
+# type fun is working
+        elif cmd_name == "type":
+            if arg_t in builtin: print(f"{arg_t} is a shell builtin")
+                
+            elif path := shutil.which(arg_t): print(f"{arg_t} is {path}")
+                
+            else: print(f"{arg_t}: not found")
+                
+# execute fun working< i think in windows isn't will work well
+        elif execute_command(cmd_name): subprocess.run(tokens)
 
-        if cmd_name == "exit":
-            break
-
-        elif command.startswith("echo "):
-            print(command[5:])
-
-        elif cmd_name.startswith("type "):
-            cmd_type = cmd_name[5:]
-
-            if cmd_type in ["type","exit","echo"]:
-                print(f"{cmd_type} is a shell builtin")
-
-            elif path := shutil.which(cmd_type):
-                print(f"{cmd_type} is {path}")
-
-            else:
-                print(f"{cmd_name[5:]}: not found")
-
-        elif execute_command(file_name):
-            subprocess.run(tokens)
-
-        else:
-            print(f"{cmd_name}: command not found")
+# to get back ans let user know the command not found
+        else: print(f"{cmd_name}: command not found")
 
 
 
