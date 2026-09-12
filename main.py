@@ -21,7 +21,7 @@ def main():
         tokens = user_input
         arg_w = user_input[1:]
         arg_t = " ".join(arg_w)
-        builtin = ["type","exit","echo"]
+        builtin = ["type","exit","echo","pwd"]
 # exit fun is done
 # TODO: use sys.exit(int(arg_t)) - handle empty arg
         if cmd_name == "exit": break
@@ -37,13 +37,14 @@ def main():
                 
             else: print(f"{arg_t}: not found")
                 
+# pwd function is working
+        elif cmd_name == "pwd": print(os.getcwd())
+
 # execute fun working< i think in windows isn't will work well
         elif execute_command(cmd_name): subprocess.run(tokens)
 
 # to get back ans let user know the command not found
         else: print(f"{cmd_name}: command not found")
-
-
 
 if __name__ == "__main__":
     main()
