@@ -7,13 +7,35 @@ def execute_command(c):
     for d in os.get_exec_path():
         if os.access(fullpath := os.path.join(d, c), os.X_OK):
             return fullpath
+        
+def parse_line(text):
+    empty_list = []
+    empty_str = ""
+    flag = False
+    for char in text:
+        if char == "'":
+            flag = not flag
+        elif char == " ":
+            if flag:
+                empty_str += char
+            else:
+                if empty_str != "":
+                    empty_list.append(empty_str)
+                    empty_str = ""
+        else:
+            empty_str += char
+#            empty_list.append(empty_str)
+#            empty_str = ""
+    if empty_str != "":
+        empty_list.append(empty_str)
+    return empty_list
 
 def main():
     while True:
         sys.stdout.write("$ ")
         sys.stdout.flush()
 
-        user_input = input().strip().split()
+        user_input = single_quotes(input().strip())
         if not user_input:
             continue
 
@@ -53,8 +75,6 @@ def main():
 
 # to get back ans let user know the command not found
         else: print(f"{cmd_name}: command not found")
-
-
 
 if __name__ == "__main__":
     main()
