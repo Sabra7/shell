@@ -12,18 +12,17 @@ def parse_line(text):
     empty_list = []
     empty_str = ""
     flag = False
+    flag2 = False
     for char in text:
-        if char == "'":
-            flag = not flag
+        if char == "'" and not flag2: flag = not flag
+        elif char == '"' and not flag: flag2 = not flag2
         elif char == " ":
-            if flag:
-                empty_str += char
+            if flag or flag2: empty_str += char
             else:
                 if empty_str != "":
                     empty_list.append(empty_str)
                     empty_str = ""
-        else:
-            empty_str += char
+        else: empty_str += char
 #            empty_list.append(empty_str)
 #            empty_str = ""
     if empty_str != "":
@@ -35,7 +34,7 @@ def main():
         sys.stdout.write("$ ")
         sys.stdout.flush()
 
-        user_input = single_quotes(input().strip())
+        user_input = parse_line(input().strip())
         if not user_input:
             continue
 
